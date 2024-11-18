@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PartyController;
-
+use App\Http\Controllers\ElectionPartiesController;
 use App\Http\Middleware\isAdmin;
 
 Route::get('/', function () {
@@ -36,6 +36,7 @@ Route::middleware(['auth', isAdmin::class])->prefix('admin')->group(function () 
 
     Route::resource('elections', ElectionController::class);
     Route::resource('partys', PartyController::class);
+    Route::resource('election_parties', ElectionPartiesController::class);
 
 
 

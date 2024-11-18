@@ -52,6 +52,14 @@
       </a>
   @endif
 
+    <li class="@if(Request::is('users*'))
+    active current-page @endif ">
+      <a href="{{route('election_parties.index')}}">
+        <i class="bi bi-flag"></i>
+        <span class="menu-text">Election Parties</span>
+      </a>
+
+
 
 
   
