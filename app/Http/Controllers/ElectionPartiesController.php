@@ -34,19 +34,28 @@ class ElectionPartiesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'election_id' => 'required',
-            'party_name' => 'required',
+            'election_id' => 'required|exists:elections,id',
+            'party_id.*' => 'required|exists:parties,id',
         ]);
+
+        $validated['party_id'] = array_unique($validated['party_id']);
         
-        foreach ($validated['party_name'] as $party_id) {
-            election_parties::create([
-            'party_id' => $party_id,
-            'election_id' => $validated['election_id'],
-            ]);
+
+        if(count($validated['party_id']) < 2){
+            return redirect()->back()->with('error', 'Please select at least 2 parties for election.');
         }
+
+        $electionParties = [];
+        foreach($validated['party_id'] as $party_id){
+            $electionParties[] = [
+                'election_id' => $validated['election_id'],
+                'party_id' => $party_id
+        ];
+
 
         return redirect()->route('election_parties.index')->with('success', 'Election parties added successfully.');
 
+    }
     }
 
     /**

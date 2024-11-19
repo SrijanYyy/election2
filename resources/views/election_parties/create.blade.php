@@ -9,6 +9,15 @@
   <div class="col-xxl-12">
     @include('components.message-flash')
 
+    @if($errors->any())
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
     <!-- Form to Add New Entry -->
     <div class="card shadow mb-4">
       <div class="card-body">
@@ -16,13 +25,13 @@
           <h5 class="card-title">Add</h5>
         </div>
         <hr>
-        <form action="#" method="POST" name="add-party">
+        <form action="{{route('election_parties.store')}}" method="POST" >
           @csrf
           <div class="row mb-3">
             <!-- Election Dropdown -->
             <div class="col-md-6">
               <label for="election" class="form-label">Election</label>
-              <select class="form-control" id="election" name="election" required>
+              <select class="form-control" id="election" name="election_id" required>
                 <option value="">Select Election</option>
                 @foreach($elections as $election)
                   <option value="{{ $election->id }}">{{ $election->name }}</option>
@@ -36,7 +45,7 @@
             <div class="party-fields row mb-3">
               <div class="col-md-6">
                 <label for="party_name" class="form-label">Party Name</label>
-                <select class="form-control" name="party_name[]" required>
+                <select class="form-control" name="party_id[]" required>
                   <option value="">Select Party</option>
                   @foreach($partys as $party)
                     <option value="{{ $party->id }}">{{ $party->name }}</option>
@@ -83,7 +92,7 @@
         `<div class="party-fields row mb-3" id="row${i}">
           <div class="col-md-6">
             <label for="party_name" class="form-label">Party Name</label>
-            <select class="form-control" name="party_name[]" required>
+            <select class="form-control" name="party_id[]" required>
               <option value="">Select Party</option>
               ${partyOptions}
             </select>
