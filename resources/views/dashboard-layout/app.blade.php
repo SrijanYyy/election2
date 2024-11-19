@@ -59,6 +59,7 @@
 
           <!-- App footer start -->
           @include('dashboard-layout.scripts')
+          @yield('scripts')
             @include('dashboard-layout.footer')
           <!-- App footer end -->
 

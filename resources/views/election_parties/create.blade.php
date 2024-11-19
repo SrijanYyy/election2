@@ -68,9 +68,7 @@
 
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      alert('JavaScript is working!');
-  });
+ 
   
   $(document).ready(function() {
     var i = 1;

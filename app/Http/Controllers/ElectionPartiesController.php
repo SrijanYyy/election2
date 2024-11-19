@@ -33,7 +33,20 @@ class ElectionPartiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'election_id' => 'required',
+            'party_name' => 'required',
+        ]);
+        
+        foreach ($validated['party_name'] as $party_id) {
+            election_parties::create([
+            'party_id' => $party_id,
+            'election_id' => $validated['election_id'],
+            ]);
+        }
+
+        return redirect()->route('election_parties.index')->with('success', 'Election parties added successfully.');
+
     }
 
     /**
