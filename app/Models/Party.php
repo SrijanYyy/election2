@@ -11,4 +11,8 @@ class Party extends Model
         'description',
         'logo',
     ];
+    public function elections()
+    {
+        return $this->belongsToMany(Election::class, 'election_parties');
+    }
 }

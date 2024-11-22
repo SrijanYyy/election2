@@ -2,6 +2,7 @@
 
 @section('breadcrumb')
 <span>Home</span> / <span class="menu-text">Election Parties</span>
+{{-- @endsection --}}
 @endsection
 
 @section('content')
@@ -35,10 +36,29 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Loop through existing elections -->
-              
+              @foreach ($election_parties as $election_party)
+              <tr>
+                <td>{{ $loop->iteration }}</td> 
+                <td>{{ $election_party->election->name }}</td>
+                <td>{{ $election_party->created_at ? $election_party->created_at->format('d M, Y') : 'N/A' }}</td>
+                <td>{{ $election_party->updated_at ? $election_party->updated_at->format('d M, Y') : 'N/A' }}</td>
+                <td>
+                  <a href="{{ route('election_parties.show', $election_party->id) }}" class="btn btn-sm btn-info">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a href="{{ route('election_parties.edit', $election_party->id) }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <form action="{{ route('election_parties.destroy', $election_party->id) }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              @endforeach
 
-            
             </tbody>
           </table>
 
