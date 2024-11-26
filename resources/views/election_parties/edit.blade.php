@@ -25,7 +25,7 @@
                     <h5 class="card-title">Edit</h5>
                 </div>
                 <hr>
-                <form action="{{ route('election_parties.update', $election_parties->id) }}" method="POST">
+                <form action="{{ route('election_parties.update', $election_party->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="row mb-3">
@@ -35,7 +35,7 @@
                             <select class="form-control" id="election" name="election_id" required>
                                 <option value="">Select Election</option>
                                 @foreach($elections as $election)
-                                    <option value="{{ $election->id }}" {{ $election_parties->election_id == $election->id ? 'selected' : '' }}>{{ $election->name }}</option>
+                                    <option value="{{ $election->id }}" {{ $election_party->election_id == $election->id ? 'selected' : '' }}>{{ $election->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -43,7 +43,7 @@
 
                     <!-- Party Fields Container -->
                     <div id="party-container">
-                        @foreach($election_parties->parties as $index => $party)
+                        @foreach($election_party->parties as $index => $party)
                             <div class="party-fields row mb-3" id="row{{ $index + 1 }}">
                                 <div class="col-md-6">
                                     <label for="party_name" class="form-label">Party Name</label>
@@ -84,7 +84,7 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        var i = {{ count($electionParty->parties) }};
+        var i = {{ count($election_party->parties) }}; // Fix for variable name
         // Pre-render the options using Blade
         var partyOptions = `{!! json_encode($partys->map(fn($party) => '<option value="'.$party->id.'">'.$party->name.'</option>')->join('')) !!}`;
 

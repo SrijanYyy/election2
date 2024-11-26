@@ -11,4 +11,7 @@ class Election extends Model
         'description',
         'date',
     ];
+    
+
+
 }
