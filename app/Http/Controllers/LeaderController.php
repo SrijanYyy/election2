@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leader;
+use App\Models\Party;
+use App\Models\Election;
 use Illuminate\Http\Request;
 
 class LeaderController extends Controller
@@ -12,7 +14,10 @@ class LeaderController extends Controller
      */
     public function index()
     {
-        return view('leaders.index');
+        $parties = Party::all();
+        $elections = Election::all();
+        $leaders = Leader::all();
+        return view('leaders.index',compact('leaders','parties','elections'));
     }
 
     /**
@@ -20,7 +25,9 @@ class LeaderController extends Controller
      */
     public function create()
     {
-        //
+        $parties = Party::all();
+        $elections = Election::all();
+        return view('leaders.create',compact('parties','elections'));
     }
 
     /**
@@ -28,8 +35,18 @@ class LeaderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+     $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'party_id' => 'required||exists:parties,id',
+            'election_id' => 'required|exists:elections,id',
+        ]);
+
+        Leader::create($validated);
+
+        return redirect()->route('leaders.index')->with('success', 'Leader added successfully.');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -44,7 +61,9 @@ class LeaderController extends Controller
      */
     public function edit(Leader $leader)
     {
-        //
+        $parties = Party::all();
+        $elections = Election::all();
+        return view('leaders.edit',compact('leader','parties','elections'));
     }
 
     /**
@@ -52,7 +71,15 @@ class LeaderController extends Controller
      */
     public function update(Request $request, Leader $leader)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'party_id' => 'required||exists:parties,id',
+            'election_id' => 'required|exists:elections,id',
+        ]);
+
+        $leader->update($validated);
+
+        return redirect()->route('leaders.index')->with('success', 'Leader updated successfully.');
     }
 
     /**
@@ -60,6 +87,7 @@ class LeaderController extends Controller
      */
     public function destroy(Leader $leader)
     {
-        //
+        $leader->delete();
+        return redirect()->route('leaders.index')->with('success', 'Leader deleted successfully.');
     }
 }

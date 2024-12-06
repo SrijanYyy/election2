@@ -47,10 +47,10 @@
                             <div class="party-fields row mb-3" id="row{{ $index + 1 }}">
                                 <div class="col-md-6">
                                     <label for="party_name" class="form-label">Party Name</label>
-                                    <select class="form-control" name="party_id[]" required>
+                                    <select class="form-control" id ="party" name="party_id[]" required>
                                         <option value="">Select Party</option>
-                                        @foreach($partys as $partyOption)
-                                            <option value="{{ $partyOption->id }}" {{ $party->id == $partyOption->id ? 'selected' : '' }}>{{ $partyOption->name }}</option>
+                                        @foreach($partys as $party)
+                                            <option value="{{ $party->id }}" {{ $party->id == $party->id ? 'selected' : '' }}>{{ $party->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -83,36 +83,56 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        var i = {{ count($election_party->parties) }}; // Fix for variable name
-        // Pre-render the options using Blade
-        var partyOptions = `{!! json_encode($partys->map(fn($party) => '<option value="'.$party->id.'">'.$party->name.'</option>')->join('')) !!}`;
+ 
+  
+  $(document).ready(function() {
+    var i = 1;
+    // Pre-render the options using Blade
+    var partyOptions = `{!! json_encode($partys->map(fn($party) => '<option value="'.$party->id.'">'.$party->name.'</option>')->join('')) !!}`;
 
-        // Add Party Button Click Event
-        $("#add-party").click(function() {
-            i++;
-            // Append Party Fields
-            $('#party-container').append(
-                `<div class="party-fields row mb-3" id="row${i}">
-                    <div class="col-md-6">
-                        <label for="party_name" class="form-label">Party Name</label>
-                        <select class="form-control" name="party_id[]" required>
-                            <option value="">Select Party</option>
-                            ${partyOptions}
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="button" name="remove" id="${i}" class="btn btn-danger btn_remove">X</button>
-                    </div>
-                </div>`
-            );
-        });
-
-        // Remove Party Field
-        $(document).on('click', '.btn_remove', function() {
-            var button_id = $(this).attr("id");
-            $('#row' + button_id).remove();
-        });
+    // Add Party Button Click Event
+    $("#add-party").click(function() {
+      i++;
+      // Append Party Fields
+      $('#party-container').append(
+        `<div class="party-fields row mb-3" id="row${i}">
+          <div class="col-md-6">
+            <label for="party_name" class="form-label">Party Name</label>
+            <select class="form-control" name="party_id[]" required>
+              <option value="">Select Party</option>
+              ${partyOptions}
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="button" name="remove" id="${i}" class="btn btn-danger btn_remove">X</button>
+          </div>
+        </div>`
+      );
     });
+
+    // Remove Party Field
+    $(document).on('click', '.btn_remove', function() {
+      var button_id = $(this).attr("id");
+      $('#row' + button_id).remove();
+    });
+
+    // Form Submission
+    $("form[name='add-party']").submit(function(event) {
+      event.preventDefault(); // Prevent form from submitting normally
+      var formdata = $(this).serialize();
+      console.log(formdata);
+
+      $.ajax({
+        url: "/election_parties/edit",
+        type: "PUT",
+        data: formdata,
+        cache: false,
+        success: function(result) {
+          alert(result);
+          $("form[name='add-party']")[0].reset();
+        }
+      });
+    });
+  });
 </script>
 @endsection

@@ -6,7 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\ElectionPartiesController;
+use App\Http\Controllers\LeaderController;
 use App\Http\Middleware\isAdmin;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,6 +39,7 @@ Route::middleware(['auth', isAdmin::class])->prefix('admin')->group(function () 
     Route::resource('elections', ElectionController::class);
     Route::resource('partys', PartyController::class);
     Route::resource('election_parties', ElectionPartiesController::class);
+    Route::resource('leaders', LeaderController::class);
 
 
 

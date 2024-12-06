@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Leader extends Model
 {
-    protected $fillable = ['user_id', 'party_id'];
+    protected $fillable = ['name', 'election_id','party_id'];
 
     public function user()
     {
@@ -16,5 +16,9 @@ class Leader extends Model
     public function party()
     {
         return $this->belongsTo(Party::class);
+    }
+    public function election()
+    {
+        return $this->belongsTo(Election::class);
     }
 }

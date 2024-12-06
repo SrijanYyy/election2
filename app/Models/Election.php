@@ -12,6 +12,9 @@ class Election extends Model
         'date',
     ];
     
-
+    public function parties()
+    {
+        return $this->belongsToMany(Party::class, 'election_parties', 'election_id', 'party_id');
+    }
 
 }

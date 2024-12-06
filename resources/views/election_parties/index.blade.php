@@ -11,7 +11,6 @@
 
     <div class="card shadow mb-4">
       <div class="card-body">
-        <!-- Election List Header with Create Button -->
         <div class="d-flex justify-content-between align-items-center">
           <h5 class="card-title">Election Parties</h5>
           <a href="{{ route('election_parties.create') }}" class="btn btn-primary">
@@ -20,7 +19,6 @@
         </div>
         <hr>
 
-        <!-- Election Table -->
         <div class="table-responsive">
           <table class="table align-middle table-hover m-0">
             <thead>
@@ -29,40 +27,32 @@
                 <th>Election</th>
                 <th>Parties</th>
                 <th>Created at</th>
-                <th>Updated at</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              @foreach ($election_parties as $election_party)
+              @foreach ($election_parties as $election)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $election_party->election->name }}</td>
+                <td>{{ $election->name }}</td>
                 <td>
-                  @if ($election_party->party)  <!-- Use 'party' instead of 'partys' -->
+                  <button class="btn btn-sm btn-secondary view-parties-btn" data-election-id="{{ $election->id }}">
+                    View Parties
+                  </button>
+                  <div id="parties-list-{{ $election->id }}" class="parties-list" style="display: none;">
                     <ul class="list-unstyled">
-                      <li>
-                        <a href="javascript:void(0);" class="party-link" data-party-id="{{ $election_party->party->id }}">
-                          {{ $election_party->party->name }}
-                        </a>
-                        <!-- Hidden Party Details -->
-                        <div id="party-details-{{ $election_party->party->id }}" class="party-details border p-2 mt-2" style="display: none;">
-                          <p><strong>Party Name:</strong> {{ $election_party->party->name }}</p>
-                          <button class="btn btn-sm btn-secondary close-party-details" data-party-id="{{ $election_party->party->id }}">Close</button>
-                        </div>
-                      </li>
+                      @foreach ($election->parties as $party)
+                        <li>{{ $party->name }}</li>
+                      @endforeach
                     </ul>
-                  @else
-                    <p class="text-muted">No party associated with this election.</p>
-                  @endif
+                    <button class="btn btn-sm btn-danger close-parties-btn" data-election-id="{{ $election->id }}">
+                      Close
+                    </button>
+                  </div>
                 </td>
-                <td>{{ $election_party->created_at ? $election_party->created_at->format('d M, Y') : 'N/A' }}</td>
-                <td>{{ $election_party->updated_at ? $election_party->updated_at->format('d M, Y') : 'N/A' }}</td>
+                <td>{{ $election->created_at ? $election->created_at->format('d M, Y') : 'N/A' }}</td>
                 <td>
-                  <a href="{{ route('election_parties.edit', $election_party->id) }}" class="btn btn-sm btn-primary">
-                    <i class="bi bi-pencil"></i>
-                  </a>
-                  <form action="{{ route('election_parties.destroy', $election_party->id) }}" method="POST" class="d-inline">
+                  <form action="{{ route('election_parties.destroy', $election->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
@@ -74,38 +64,35 @@
               @endforeach
             </tbody>
           </table>
-
-          <!-- Pagination links -->
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- JavaScript for Toggle Functionality -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Handle party link clicks
-    document.querySelectorAll('.party-link').forEach(link => {
-      link.addEventListener('click', function () {
-        const partyId = this.dataset.partyId;
-        const partyDetails = document.getElementById(`party-details-${partyId}`);
-        if (partyDetails) {
-          partyDetails.style.display = 'block';
-        }
-      });
+document.addEventListener('DOMContentLoaded', () => {
+    // Show the parties list when "View Parties" is clicked
+    document.querySelectorAll('.view-parties-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const electionId = this.dataset.electionId;
+            const partiesList = document.getElementById(`parties-list-${electionId}`);
+            if (partiesList) {
+                partiesList.style.display = 'block';
+            }
+        });
     });
 
-    // Handle close button clicks
-    document.querySelectorAll('.close-party-details').forEach(button => {
-      button.addEventListener('click', function () {
-        const partyId = this.dataset.partyId;
-        const partyDetails = document.getElementById(`party-details-${partyId}`);
-        if (partyDetails) {
-          partyDetails.style.display = 'none';
-        }
-      });
+    // Hide the parties list when "Close" is clicked
+    document.querySelectorAll('.close-parties-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const electionId = this.dataset.electionId;
+            const partiesList = document.getElementById(`parties-list-${electionId}`);
+            if (partiesList) {
+                partiesList.style.display = 'none';
+            }
+        });
     });
-  });
+});
 </script>
 @endsection
