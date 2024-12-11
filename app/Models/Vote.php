@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Leader extends Model
+class Vote extends Model
 {
-    protected $fillable = ['name', 'election_id','party_id','logo'];
+    protected $fillable = ['user_id', 'party_id', 'leader_id'];
 
     public function user()
     {
@@ -17,8 +17,9 @@ class Leader extends Model
     {
         return $this->belongsTo(Party::class);
     }
-    public function election()
+
+    public function leader()
     {
-        return $this->belongsTo(Election::class);
+        return $this->belongsTo(Leader::class);
     }
 }

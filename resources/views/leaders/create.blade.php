@@ -1,7 +1,7 @@
 @extends('dashboard-layout.app')
 
 @section('breadcrumb')
-<span>Home</span> / <span class="menu-text">Elections/Create</span>
+<span>Home</span> / <span class="menu-text">Leaders/Create</span>
 @endsection
 
 @section('content')
@@ -25,7 +25,7 @@
           <h5 class="card-title">Add</h5>
         </div>
         <hr>
-        <form action="{{route('leaders.store')}}" method="POST" >
+        <form action="{{route('leaders.store')}}" method="POST" enctype="multipart/form-data">
           @csrf
           <div class="row mb-3">
           <div class="col-md-4">
@@ -61,6 +61,11 @@
             </div>
           </div>
 
+          <div class="col-md-4">
+            <label for="logo">Image</label>
+            <input type="file" id="logo" name="logo" class="form-control" required>
+          </div>
+        </div>
         
 
           <!-- Submit Button -->

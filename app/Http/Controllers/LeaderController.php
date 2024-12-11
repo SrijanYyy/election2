@@ -39,8 +39,12 @@ class LeaderController extends Controller
             'name' => 'required|string|max:255',
             'party_id' => 'required||exists:parties,id',
             'election_id' => 'required|exists:elections,id',
-        ]);
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
 
+        ]);
+        $logoPath = $request->file('logo')->store('logos', 'public');
+        $validated['logo'] = $logoPath;
+     
         Leader::create($validated);
 
         return redirect()->route('leaders.index')->with('success', 'Leader added successfully.');
@@ -75,12 +79,26 @@ class LeaderController extends Controller
             'name' => 'required|string|max:255',
             'party_id' => 'required||exists:parties,id',
             'election_id' => 'required|exists:elections,id',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Check if a new logo is uploaded
+        if ($request->hasFile('logo')) {
+            // Delete the old logo from storage if it exists
+            if ($party->logo && file_exists(storage_path('app/public/' . $party->logo))) {
+                unlink(storage_path('app/public/' . $party->logo));
+            }
+
+            // Store the new logo and get the file path
+            $logoPath = $request->file('logo')->store('logos', 'public');
+            $validated['logo'] = $logoPath;
+        }
+    
 
         $leader->update($validated);
 
         return redirect()->route('leaders.index')->with('success', 'Leader updated successfully.');
-    }
+    } 
 
     /**
      * Remove the specified resource from storage.

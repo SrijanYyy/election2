@@ -62,6 +62,15 @@
                         </div>
                     </div>
 
+                    <div class="col-md-4">
+                        <label for="logo" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="logo" name="logo" accept="image/*">
+                        @if ($party->logo)
+                            <p>Current logo:</p>
+                            <img src="{{ asset('storage/' . $leader->logo) }}" alt="Party Logo"  style="max-width: 100px; max-height: 100px;"">
+                        @endif
+                    </div>
+
                     <!-- Submit Button -->
                     <div class="row mb-3">
                         <div class="col-md-6 d-flex justify-content-end">

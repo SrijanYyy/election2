@@ -25,7 +25,8 @@
               <th>Name</th>
               <th>Party</th>
               <th>Election</th>
-                <th>Actions</th>
+              <th>Image</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -34,6 +35,10 @@
                 <td>{{ $leader->name }}</td>
                 <td>{{ $leader->party->name ?? 'N/A' }}</td>
                 <td>{{ $leader->election->name ?? 'N/A' }}</td>
+                <td>
+                  <!-- Eye Button with no background -->
+                  <button style="background:none; border:none; font-size: 1.5rem;" onclick="showLogo('{{ asset('storage/' . $leader->logo) }}')">👁️</button>
+                </td>
                 <td>
                   <a href="{{ route('leaders.edit', $leader->id) }}" class="btn btn-sm btn-primary">
                     <i class="bi bi-pencil"></i>
@@ -50,6 +55,23 @@
             @endforeach
           </tbody>
         </table>
+
+        <div id="logoModal"
+        style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3);">
+        <img id="logoImage" src="" alt="Logo" style="max-width:100%; max-height:400px;">
+        <button onclick="closeLogo()" style="margin-top:10px;">❌ Close</button>
+      </div>
+
+      <script>
+        function showLogo(logoUrl) {
+          document.getElementById('logoImage').src = logoUrl;
+          document.getElementById('logoModal').style.display = 'block';
+        }
+
+        function closeLogo() {
+          document.getElementById('logoModal').style.display = 'none';
+        }
+      </script>
       </div>
     </div>
   </div>

@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leaders', function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('party_id')->constrained()->onDelete('cascade');
-            $table->foreignId('election_id')->constrained()->onDelete('cascade');
-            $table->string('logo');
+            $table->foreignId('leader_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+              // Ensure a user can only vote once per party
+              $table->unique(['user_id', 'party_id']);
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('leaders');
+        Schema::dropIfExists('votes');
     }
 };

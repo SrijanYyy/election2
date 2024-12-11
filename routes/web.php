@@ -7,6 +7,8 @@ use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\ElectionPartiesController;
 use App\Http\Controllers\LeaderController;
+use App\Http\Controllers\VotingController;
+use App\Http\Controllers\VoteController;
 use App\Http\Middleware\isAdmin;
 
 
@@ -22,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/vote', [VoteController::class, 'vote'])->name('vote');
 });
 
 require __DIR__.'/auth.php';
@@ -44,3 +48,10 @@ Route::middleware(['auth', isAdmin::class])->prefix('admin')->group(function () 
 
 
 });
+
+Route::get('/voting', [VotingController::class, 'index'])->name('voting.index');
+Route::get('/vote', [VoteController::class, 'index'])->name('vote.index');
+Route::post('/vote/store', [VoteController::class, 'store'])->name('voting.store');
+Route::get('/vote/results', [VoteController::class, 'results'])->name('vote.results');
+
+

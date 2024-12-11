@@ -34,7 +34,6 @@
       </a>
    
 
-    <div class="sidebarMenuScroll">
   <ul class="sidebar-menu">
     <li class="active current-page">
         <a href="{{route('elections.index')}}">
@@ -44,7 +43,6 @@
    
 
  
-       <div class="sidebarMenuScroll">
   <ul class="sidebar-menu">
     <li class="active current-page">
       <a href="{{route('partys.index')}}">
@@ -53,24 +51,36 @@
       </a>
 
 
-      <div class="sidebarMenuScroll">
   <ul class="sidebar-menu">
     <li class="active current-page">
       <a href="{{route('election_parties.index')}}">
         <i class="bi bi-flag"></i>
         <span class="menu-text">Election Parties</span>
       </a>
-      <div class="sidebarMenuScroll">
-  <ul class="sidebar-menu">
-    <li class="active current-page">
+
+      <ul class="sidebar-menu">
+        <li class="active current-page">
       <a href="{{route('leaders.index')}}">
-        <i class="bi bi-flag"></i>
+        <i class="bi bi-person"></i>
         <span class="menu-text">Leader</span>
       </a>
-
-
-
       @endif 
+
+    <ul class="sidebar-menu">
+      <li class="active current-page">
+        <a href="{{route('voting.index')}}">
+          <i class="bi bi-box2"></i>
+          <span class="menu-text">Voting</span>
+        </a>
+
+        <ul class="sidebar-menu">
+          <li class="active current-page">
+            <a href="{{route('vote.results')}}">
+              <i class="bi bi-box2"></i>
+              <span class="menu-text">Results</span>
+            </a>
+    
+
   </ul>
 </div>
 <!-- Sidebar menu ends -->
