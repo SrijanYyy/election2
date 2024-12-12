@@ -12,19 +12,24 @@
 
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h5 class="card-title">Party's List in Election</h5>
+                <!-- Flex container for heading and timer -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">Party's List in Election</h5>
+                    <!-- Timer will appear here -->
+                    <div id="election-timer" style="font-size: 1rem; color: #333; font-weight: bold;"></div>
+                </div>
                 <hr>
                 <div class="d-flex flex-wrap">
                     @foreach($leaders as $leader)
-                    <div class="card text-center m-3" style="width: 18rem; border: 1px solid #F4C17C; border-radius: 10px;">
-                        <div class="card-body" style="background: linear-gradient(135deg, #FFECD6, #FDE2CF); padding: 1.5rem;">
-                            <img src="{{ $leader->logo }}" alt="{{ $leader->name }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 3px solid #F4C17C;">
-                            <h5 class="card-title mb-1" style="color: #333;">{{ $leader->name }}</h5>
-                            <p class="card-text mb-3" style="color: #777; font-size: 0.9rem;">{{ $leader->party->name }}</p>
+                    <div class="card text-center m-3" style="width: 18rem; border: 1px solid #f1f1f1; border-radius: 10px;">
+                        <div class="card-body" style="background: radial-gradient( circle 993px at 0.5% 50.5%,  rgba(137,171,245,0.37) 0%, rgba(245,247,252,1) 100.2% ); padding: 1.5rem;">
+                            <img src="{{ $leader->party->logo }}"  class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 3px solid #f5f5f5;">
+                            <h3 class="card-title mb-1" style="color: #333333;">{{ $leader->name }}</h3>
+                            <p class="card-text mb-3" style="color: #0327f3; font-size: 0.9rem;">Party: {{ $leader->party->name }}</p>
 
                             @if($hasVoted)
                             <!-- Disabled Button for Already Voted -->
-                            <button class="btn text-white" style="border-radius: 20px; padding: 0.5rem 1rem; background-color: #dc3545; border: none;" disabled>
+                            <button class="btn text-white" style="border-radius: 20px; padding: 0.5rem 1rem; background-color: #f5031b; border: none;" disabled>
                                 Already Voted
                             </button>
                             @else
@@ -49,3 +54,6 @@
 </div>
 
 @endsection
+<script>
+
+</script>

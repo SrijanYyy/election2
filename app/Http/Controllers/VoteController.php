@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Vote;
 use App\Models\Party;
 use App\Models\Leader;
+use Carbon;
 
 
 class VoteController extends Controller
@@ -14,12 +15,13 @@ class VoteController extends Controller
     {
         $parties = Party::all();
         $leaders = Leader::all();
+        $electionEndTime = now()->addMinutes(10); // Set this dynamically as per your requirements
         // Get the authenticated user's ID
         $userId = auth()->id();
 
          // Check if the user has already voted
          $hasVoted = Vote::where('user_id', $userId)->exists();
-        return view('vote.index', compact('parties', 'leaders', 'hasVoted'));
+        return view('vote.index', compact('parties', 'leaders', 'hasVoted', 'electionEndTime'));
     }
 
     public function store(Request $request)
