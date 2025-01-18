@@ -18,7 +18,20 @@
             <i class="bi bi-plus-lg"></i> Create Leaders
           </a>
         </div>
+         <!-- Search Bar -->
+         <form method="GET" action="{{ route('leaders.index') }}" class="mb-3 d-flex mt-3">
+          <input 
+            type="text" 
+            id="search-bar" 
+            name="search" 
+            class="form-control w-25" 
+            placeholder="Search leaders..." 
+            value="{{ request('search') }}">
+        </form>
         <hr>
+        @if($leaders->isEmpty())
+          <p>No leaders found.</p>
+        @else
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -55,6 +68,11 @@
             @endforeach
           </tbody>
         </table>
+         <!-- Pagination Links -->
+<div class="mt-3 d-flex justify-content-center">
+  {{ $leaders->links() }}
+</div>
+        @endif
 
         <div id="logoModal"
         style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3);">

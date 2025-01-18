@@ -12,12 +12,26 @@ class LeaderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->query('search');
+        $leaders = Leader::with(['party', 'election'])
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                      ->orWhereHas('party', function ($q) use ($search) {
+                          $q->where('name', 'LIKE', "%{$search}%");
+                      })
+                      ->orWhereHas('election', function ($q) use ($search) {
+                          $q->where('name', 'LIKE', "%{$search}%");
+                      });
+            })
+            ->latest()
+            ->paginate(5);
+    
         $parties = Party::all();
         $elections = Election::all();
-        $leaders = Leader::all();
-        return view('leaders.index',compact('leaders','parties','elections'));
+    
+        return view('leaders.index', compact('leaders', 'parties', 'elections', 'search'));
     }
 
     /**

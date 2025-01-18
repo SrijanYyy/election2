@@ -10,11 +10,20 @@ class ElectionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $elections = Election::all();
-        return view("elections.index", compact('elections'));
-    }
+    public function index(Request $request)
+{
+    $search = $request->get('search'); // Get the search query
+
+    $elections = Election::query()
+        ->when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%')
+                         ->orWhere('description', 'like', '%' . $search . '%');
+        })
+        ->paginate(5); // Add pagination with 5 items per page
+
+    return view("elections.index", compact('elections', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

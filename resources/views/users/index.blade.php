@@ -7,66 +7,85 @@
 @section('content')
 
 <div class="row">
-              <div class="col-xxl-12">
-              @include('components.message-flash')
+    <div class="col-xxl-12">
+        @include('components.message-flash')
 
-                <div class="card shadow mb-4">
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Users and requests</h5>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table align-middle table-hover m-0" id="dataTable">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">Users and Requests</h5>
+                </div>
+
+                <!-- Search Bar -->
+                <form method="GET" action="{{ route('users.index') }}" class="mb-3 d-flex mt-3">
+                  <input 
+                    type="text" 
+                    id="search-bar" 
+                    name="search" 
+                    class="form-control w-25" 
+                    placeholder="Search users..." 
+                    value="{{ request('search') }}">
+                </form>
+                <hr>
+
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover m-0" id="dataTable">
                         <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Nagrita Number</th>
-                            <th>Nagrita Front</th>
-                            <th>Nagrita Back</th>
-                            <th>Status</th>
-                          </tr>
+                            <tr>
+                              <th>S.N.</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Nagrita Number</th>
+                                <th>Nagrita Front</th>
+                                <th>Nagrita Back</th>
+                                <th>Status</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            @foreach($users as $user)
+                            @forelse($users as $user)
                             <tr>
-                                <td>{{$user->name}}</td>
-                                <td>{{$user->email}}</td>
-                                <td>{{$user->phone}}</td>
-                                <td>{{$user->kyc->nagrita_number}}</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->kyc->nagrita_number }}</td>
                                 <td>
-                                <a href="{{asset('storage/'.$user->kyc->nagrita_front)}}" target="_blank">
-                                    View
-                                </a>
+                                    <a href="{{ asset('storage/' . $user->kyc->nagrita_front) }}" target="_blank">
+                                        View
+                                    </a>
                                 </td>
                                 <td>
-                                <a href="{{asset('storage/'.$user->kyc->nagrita_back)}}" target="_blank">
-                                    View
-                                </a>
+                                    <a href="{{ asset('storage/' . $user->kyc->nagrita_back) }}" target="_blank">
+                                        View
+                                    </a>
                                 </td>
                                 <td>
-                                    @if($user->is_active)
-                                    <form action="{{route('users.approve' , $user->id)}}" method="post">
-                                    @csrf
-                                    <button class="btn btn-sm btn-warning">Ban User</button>
-                                    @else
-                                    <form action="{{route('users.approve' , $user->id)}}" method="post">
-                                    @csrf
-                                    <button class="btn btn-sm btn-success">Approve</button>
-                                    @endif
+                                    <form action="{{ route('users.approve', $user->id) }}" method="post">
+                                        @csrf
+                                        @if($user->is_active)
+                                        <button class="btn btn-sm btn-warning">Ban User</button>
+                                        @else
+                                        <button class="btn btn-sm btn-success">Approve</button>
+                                        @endif
+                                    </form>
                                 </td>
-
                             </tr>
-                            @endforeach
-                          
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">No users found.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
-                      </table>
-                    </div>
-                  </div>
+                    </table>
                 </div>
-              </div>
-    </div>
-@endsection
 
+                <!-- Pagination Links -->
+                <div class="mt-3 d-flex justify-content-center">
+                    {{ $users->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

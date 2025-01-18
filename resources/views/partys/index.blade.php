@@ -20,10 +20,24 @@
             <i class="bi bi-plus-lg"></i> Create Party
           </a>
         </div>
+        <!-- Search Bar -->
+        <form method="GET" action="{{ route('partys.index') }}" class="mb-3 d-flex mt-3">
+          <input 
+            type="text" 
+            id="search-bar" 
+            name="search" 
+            class="form-control w-25" 
+            placeholder="Search parties..." 
+            value="{{ request('search') }}">
+        </form>
+
         <hr>
 
         <!-- Election Table -->
         <div class="table-responsive">
+          @if($partys->isEmpty())
+            <p class="text-center">No parties found.</p>
+          @else
           <table class="table align-middle table-hover m-0" id="dataTable">
             <thead>
               <tr>
@@ -57,10 +71,16 @@
                     </button>
                   </form>
                 </td>
+
               </tr>
               @endforeach
             </tbody>
           </table>
+          <!-- Pagination Links -->
+          <div class="mt-3 d-flex justify-content-center">
+            {{ $partys->links() }}
+          </div>
+          @endif
 
           <!-- Logo Modal -->
           <div id="logoModal"

@@ -12,7 +12,13 @@ class PartyController extends Controller
      */
     public function index()
     {
-        $partys = Party::all();
+        $search = request()->query('search');
+        $partys = Party::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                             ->orWhere('description', 'like', '%' . $search . '%');
+            })
+            ->paginate(5);
         return view('partys.index',compact('partys'));
     }
 
